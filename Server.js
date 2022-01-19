@@ -5,10 +5,12 @@ import Middleware from './src/middleware/Middleware.js'
 import config from './config/config.js'
 import bodyParser from 'body-parser'
 import UserRoutes from './src/routes/User.routes.js'
+import cors from 'cors'
 
 
 
 const app = express()
+app.use(cors())
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
 app.use(helmet())
