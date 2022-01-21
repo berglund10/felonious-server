@@ -1,17 +1,21 @@
 import UserModel from "../models/User.model.js"
 import StatusCode from "../../config/StatusCode.js"
 
+
 const createUser = async (req, res) => {
+
+
 
     const user = new UserModel({
         username: req.body.username,
-        password: req.body.password
+        password: req.body.password,
     })
 
     try {
 
         const response = await user.save()
         res.status(StatusCode.CREATED).send(response)
+        console.log(response.character)
 
     }
     catch (error) {

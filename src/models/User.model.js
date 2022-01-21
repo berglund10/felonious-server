@@ -4,6 +4,10 @@ const UserSchema = mongoose.Schema(
     {
         username: String,
         password: String,
+        character: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'character'
+        },
 
     }, { timestamps: true }
 )
