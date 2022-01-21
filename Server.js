@@ -5,6 +5,7 @@ import Middleware from './src/middleware/Middleware.js'
 import config from './config/config.js'
 import bodyParser from 'body-parser'
 import UserRoutes from './src/routes/User.routes.js'
+import CharacterRoutes from './src/routes/Character.routes.js'
 import cors from 'cors'
 
 
@@ -25,6 +26,7 @@ app.get('/home', Middleware.notFound, (req, res) => {
 app.get('/users', Middleware.isAuth, (req, res) => {
 })
 
+CharacterRoutes.routes(app)
 UserRoutes.routes(app)
 
 app.use(Middleware.notFound)

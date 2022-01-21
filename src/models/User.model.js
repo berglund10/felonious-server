@@ -4,9 +4,9 @@ const UserSchema = mongoose.Schema(
     {
         username: String,
         password: String,
-    }, {timestamps: true}
-)
 
+    }, { timestamps: true }
+)
 
 const UserModel = mongoose.model('user', UserSchema)
 
