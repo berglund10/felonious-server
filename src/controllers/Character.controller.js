@@ -1,4 +1,4 @@
-import CharacterModel from "../models/User.model.js"
+import CharacterModel from "../models/Character.model.js"
 import StatusCode from "../../config/StatusCode.js"
 
 const createCharacter = async (req, res) => {
