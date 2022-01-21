@@ -89,6 +89,21 @@ const deleteUser = async (req, res) => {
     }
 }
 
+const loginUser = async (req, res) => {
+    try {
+        const response = await UserModel.findOne({
+            username: req.body.username,
+            password: req.body.password
+        })
+        res.status(StatusCode.OK).send(response.username)
+    } catch (error) {
+        res.status(StatusCode.INTERNAL_SERVER_ERROR).send({
+            message: "Kunde inte hitta denna användaren:" + req.params.userId,
+            error: error.message
+        })
+
+    }
+}
 
 
 export default {
@@ -97,5 +112,6 @@ export default {
     getUserWithId,
     getUserWithUsernameQuery,
     updateUser,
-    deleteUser
+    deleteUser,
+    loginUser
 }

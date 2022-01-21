@@ -8,6 +8,7 @@ const routes = (app) => {
     app.get('/searchuser', UserController.getUserWithUsernameQuery)
     app.put('/user/:userId', UserController.updateUser)
     app.delete('/user/:userId', UserController.deleteUser)
+    app.post('/login', UserController.loginUser)
 
 }
 
