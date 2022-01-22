@@ -1,16 +1,30 @@
 import CharacterModel from "../models/Character.model.js"
 import StatusCode from "../../config/StatusCode.js"
+import UserController from "./User.controller.js"
+import UserModel from "../models/User.model.js"
 
-const createCharacter = async (req, res) => {
+const createCharacterWithUserId = async (req, res) => {
+
+
+    const user = await UserModel.findById(req.params.userId)
+
 
     const character = new CharacterModel({
         health: req.body.health,
-        strength: req.body.strength
+        strength: req.body.strength,
     })
+
+    user.character = character._id
 
     try {
 
+
+        character.user = user.userId;
+
+        await user.save()
+
         const response = await character.save()
+
         res.status(StatusCode.CREATED).send(response)
 
     }
@@ -31,6 +45,6 @@ const getAllCharacters = async (req, res) => {
 }
 
 export default {
-    createCharacter,
+    createCharacterWithUserId,
     getAllCharacters
 }

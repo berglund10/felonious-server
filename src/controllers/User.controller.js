@@ -16,7 +16,7 @@ const createUser = async (req, res) => {
         character: character._id,
     })
 
-    character.user = user.userId;
+    character.user = user._id;
 
     await character.save()
 
@@ -73,6 +73,7 @@ const getUserWithUsernameQuery = async (req, res) => {
         })
     }
 }
+
 
 const updateUser = async (req, res) => {
     try {
@@ -152,5 +153,5 @@ export default {
     updateUser,
     deleteUser,
     loginUser,
-    checkUser
+    checkUser,
 }
