@@ -1,6 +1,5 @@
 import CharacterModel from "../models/Character.model.js"
 import StatusCode from "../../config/StatusCode.js"
-import UserController from "./User.controller.js"
 import UserModel from "../models/User.model.js"
 
 const createCharacterWithUserId = async (req, res) => {
@@ -17,9 +16,6 @@ const createCharacterWithUserId = async (req, res) => {
     user.character = character._id
 
     try {
-
-
-        character.user = user.userId;
 
         await user.save()
 
@@ -44,7 +40,20 @@ const getAllCharacters = async (req, res) => {
 
 }
 
+const getCharacterWithId = async (req, res) => {
+    try {
+        const response = await CharacterModel.findById(req.params.charId)
+        res.status(StatusCode.OK).send(response)
+    } catch (error)  {
+    res.status(StatusCode.INTERNAL_SERVER_ERROR).send({
+        message: "Error when trying to get char with id: " + req.params.charId,
+        error: error.message
+    })
+}
+}
+
 export default {
     createCharacterWithUserId,
-    getAllCharacters
+    getAllCharacters,
+    getCharacterWithId
 }

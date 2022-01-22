@@ -5,23 +5,10 @@ import CharacterModel from "../models/Character.model.js"
 
 const createUser = async (req, res) => {
 
-    const character = new CharacterModel({
-        health: "0",
-        strength: "0",
-    })
-
     const user = new UserModel({
         username: req.body.username,
         password: req.body.password,
-        character: character._id,
     })
-
-    character.user = user._id;
-
-    await character.save()
-
-    console.log(character.health)
-
 
     try {
 
