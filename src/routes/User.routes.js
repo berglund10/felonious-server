@@ -9,6 +9,7 @@ const routes = (app) => {
     app.put('/user/:userId', UserController.updateUser)
     app.delete('/user/:userId', UserController.deleteUser)
     app.post('/login', UserController.loginUser)
+    app.get('/checkuser', UserController.checkUser)
 
 }
 

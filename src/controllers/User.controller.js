@@ -1,15 +1,27 @@
 import UserModel from "../models/User.model.js"
 import StatusCode from "../../config/StatusCode.js"
+import CharacterModel from "../models/Character.model.js"
 
 
 const createUser = async (req, res) => {
 
-
+    const character = new CharacterModel({
+        health: "0",
+        strength: "0",
+    })
 
     const user = new UserModel({
         username: req.body.username,
         password: req.body.password,
+        character: character._id,
     })
+
+    character.user = user.userId;
+
+    await character.save()
+
+    console.log(character.health)
+
 
     try {
 
@@ -99,13 +111,35 @@ const loginUser = async (req, res) => {
             username: req.body.username,
             password: req.body.password
         })
-        res.status(StatusCode.OK).send(response.username)
+        if(response.character === undefined) {
+            console.log("har ingen char")
+        }
+        res.status(StatusCode.OK).send(response)
+
     } catch (error) {
         res.status(StatusCode.INTERNAL_SERVER_ERROR).send({
             message: "Kunde inte hitta denna användaren:" + req.params.userId,
             error: error.message
         })
 
+    }
+}
+
+const checkUser = async (req, res) => {
+    try {
+        const response = await UserModel.findOne({
+            username: req.body.username,
+            password: req.body.password
+        })
+        if(response.character === undefined) {
+            return console.log("Du har ingen char")
+        }
+        res.status(StatusCode.OK).send(response.character)
+    } catch (error) {
+        res.status(StatusCode.INTERNAL_SERVER_ERROR).send({
+            message: "Hittade ingen användare",
+            error: error.message
+        })
     }
 }
 
@@ -117,5 +151,6 @@ export default {
     getUserWithUsernameQuery,
     updateUser,
     deleteUser,
-    loginUser
+    loginUser,
+    checkUser
 }
