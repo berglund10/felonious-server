@@ -11,6 +11,7 @@ const createCharacterWithUserId = async (req, res) => {
     const character = new CharacterModel({
         health: req.body.health,
         strength: req.body.strength,
+        rundor: 10
     })
 
     user.character = character._id
@@ -37,7 +38,6 @@ const getAllCharacters = async (req, res) => {
     } catch (error) {
         res.status(StatusCode.INTERNAL_SERVER_ERROR).send({message: error.message})
     }
-
 }
 
 const getCharacterWithId = async (req, res) => {
@@ -52,8 +52,25 @@ const getCharacterWithId = async (req, res) => {
 }
 }
 
+const updateCharacterRundor = async (req, res) => {
+    try {
+        const rundor = await CharacterModel.findById(req.params.charId)
+        const response = await CharacterModel.findByIdAndUpdate(req.params.charId, {
+            rundor: rundor.rundor + 25
+        }, {new: true}) // Är false by default
+        res.status(StatusCode.OK).send(response)
+    } catch (error) {
+        res.status(StatusCode.INTERNAL_SERVER_ERROR).send({
+            message: "Kunde inte uppdatera denna char:" + req.params.charId,
+            error: error.message
+        })
+
+    }
+}
+
 export default {
     createCharacterWithUserId,
     getAllCharacters,
-    getCharacterWithId
+    getCharacterWithId,
+    updateCharacterRundor
 }

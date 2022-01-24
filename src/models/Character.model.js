@@ -4,6 +4,7 @@ const CharacterSchema = mongoose.Schema(
     {
         health: String,
         strength: String,
+        rundor: { type: Number, min: 0, max: 125 }
     }, { timestamps: true }
 )
 
