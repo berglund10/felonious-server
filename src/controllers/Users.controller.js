@@ -1,6 +1,5 @@
 import pool from '../../db.js'
 import StatusCode from '../../config/StatusCode.js'
-import { response } from 'express'
 
 
 const createUser = async (req, res) => {
@@ -63,13 +62,41 @@ const getUserChar = async (req, res) => {
 const deleteUserChar = async (req, res) => {
     try {
         const {username} = req.body
-        const reponse = await pool.query('UPDATE users SET character_id = null where users.username = $1',
+        const response = await pool.query('UPDATE users SET character_id = null WHERE users.username = $1',
         [username])
-        console.log(response)
         send.status(StatusCode.OK).send(response)
     } catch (error) {
         res.status(StatusCode.INTERNAL_SERVER_ERROR).send({
             message: "Hittade ingen att deleta",
+            error: error.message
+        })
+    }
+}
+
+const setUserChar = async (req, res) => {
+    try {
+        const {username, character_id} = req.body
+        const response = await pool.query('UPDATE users SET character_id = $2 where users.username = $1',
+        [username, character_id])
+        send.status(StatusCode.OK).send(response)
+    } catch (error) {
+        res.status(StatusCode.INTERNAL_SERVER_ERROR).send({
+            message: "Kunde inte lägga till char",
+            error: error.message
+        })
+    }
+}
+
+
+const createCharacter = async (req, res) => {
+    try {
+        const {name, health, strength} = req.body
+        const response = await pool.query('INSERT INTO character(name, health, strength) VALUES ($1, $2, $3) RETURNING character_id', 
+        [name, health, strength])
+        res.status(StatusCode.CREATED).send(response)
+    } catch (error) {
+        res.status(StatusCode.INTERNAL_SERVER_ERROR).send({
+            message: "Kunde inte skapa användaren",
             error: error.message
         })
     }
@@ -80,5 +107,7 @@ export default {
     loginUser,
     getUserChar,
     deleteUserChar,
-    createUser
+    createUser,
+    createCharacter,
+    setUserChar
 }

@@ -6,8 +6,10 @@ const routes = (app) => {
     app.get('/userinfo', UsersController.getUserChar)
     app.post('/login', UsersController.loginUser)
     app.get('/users', UsersController.getAllUsers)
-    app.delete('/users', UsersController.deleteUserChar)
+    app.put('/users', UsersController.deleteUserChar)
     app.post('/users', UsersController.createUser)
+    app.post('/createchar', UsersController.createCharacter)
+    app.put('/createchar', UsersController.setUserChar)
 
 
     app.get('/user', UserController.getAllUsers)
