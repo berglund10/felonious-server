@@ -1,6 +1,4 @@
-import CharacterModel from "../models/Character.model.js"
 import StatusCode from "../../config/StatusCode.js"
-import UserModel from "../models/User.model.js"
 
 const createCharacterWithUserId = async (req, res) => {
 
@@ -68,9 +66,24 @@ const updateCharacterRundor = async (req, res) => {
     }
 }
 
+const deleteChar = async (req, res) => {
+    try {
+        const response = await CharacterModel.findByIdAndDelete(req.params.charId)
+        res.status(StatusCode.OK).send({
+            message: "Du tog bort char:" + " med id: " + req.params.charId
+        })
+    } catch (error) {
+        res.status(StatusCode.INTERNAL_SERVER_ERROR).send({
+            message: "Kunde inte hitta någon med detta ID:" + req.params.charId,
+            error: error.message
+        })
+    }
+}
+
 export default {
     createCharacterWithUserId,
     getAllCharacters,
     getCharacterWithId,
-    updateCharacterRundor
+    updateCharacterRundor,
+    deleteChar
 }

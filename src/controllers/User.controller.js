@@ -1,6 +1,4 @@
-import UserModel from "../models/User.model.js"
 import StatusCode from "../../config/StatusCode.js"
-import CharacterModel from "../models/Character.model.js"
 
 
 const createUser = async (req, res) => {
@@ -79,6 +77,21 @@ const updateUser = async (req, res) => {
     }
 }
 
+const removeCharRef = async (req, res) => {
+    try {
+        const response = await UserModel.findByIdAndUpdate(req.params.userId, {
+            password: "hej hejbb",
+            character: undefined
+        }, {new: true})
+        res.status(StatusCode.OK).send(response)
+    } catch (error) {
+        res.status(StatusCode.INTERNAL_SERVER_ERROR).send({
+            message: "Kunda inte ta bort ref",
+            error: error.message
+        })
+    }
+}
+
 const deleteUser = async (req, res) => {
     try {
         const response = await UserModel.findByIdAndDelete(req.params.userId)
@@ -141,4 +154,5 @@ export default {
     deleteUser,
     loginUser,
     checkUser,
+    removeCharRef
 }

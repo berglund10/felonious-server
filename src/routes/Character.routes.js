@@ -6,6 +6,7 @@ const routes = (app) => {
     app.get('/char', CharacterController.getAllCharacters)
     app.get('/char/:charId', CharacterController.getCharacterWithId)
     app.put('/char/:charId', CharacterController.updateCharacterRundor)
+    app.delete('/char/:charId', CharacterController.deleteChar)
 
 }
 

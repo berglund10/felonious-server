@@ -5,7 +5,6 @@ import Middleware from './src/middleware/Middleware.js'
 import config from './config/config.js'
 import bodyParser from 'body-parser'
 import UserRoutes from './src/routes/User.routes.js'
-import CharacterRoutes from './src/routes/Character.routes.js'
 import cors from 'cors'
 
 
@@ -17,23 +16,13 @@ app.use(bodyParser.json())
 app.use(helmet())
 app.use(morgan('common'))
 
-
-
-app.get('/home', Middleware.notFound, (req, res) => {
-    res.send("hej")
-})
-
-app.get('/users', Middleware.isAuth, (req, res) => {
-})
-
-CharacterRoutes.routes(app)
+//CharacterRoutes.routes(app)
 UserRoutes.routes(app)
 
 app.use(Middleware.notFound)
 
 app.use(Middleware.errorHandler)
 
-config.connectToDatabase()
 config.connectToPort(app)
 
 export default app

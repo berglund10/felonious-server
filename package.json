@@ -10,8 +10,7 @@
   "keywords": [
     "RestAIP",
     "Express",
-    "MongoDB",
-    "Mongoose"
+    "Postgres"
   ],
   "author": "",
   "license": "ISC",
@@ -21,8 +20,8 @@
     "dotenv": "^14.2.0",
     "express": "^4.17.2",
     "helmet": "^5.0.1",
-    "mongoose": "^6.1.7",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "pg": "^8.7.1"
   },
   "devDependencies": {
     "chai": "^4.3.4",
