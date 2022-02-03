@@ -62,9 +62,9 @@ const getUserChar = async (req, res) => {
 const deleteUserChar = async (req, res) => {
     try {
         const {username} = req.body
-        const response = await pool.query('UPDATE users SET character_id = null WHERE users.username = $1',
+        await pool.query('UPDATE users SET character_id = null WHERE users.username = $1',
         [username])
-        send.status(StatusCode.OK).send(response)
+        res.status(StatusCode.OK).send("Character was removed")
     } catch (error) {
         res.status(StatusCode.INTERNAL_SERVER_ERROR).send({
             message: "Hittade ingen att deleta",
@@ -78,7 +78,8 @@ const setUserChar = async (req, res) => {
         const {username, character_id} = req.body
         const response = await pool.query('UPDATE users SET character_id = $2 where users.username = $1',
         [username, character_id])
-        send.status(StatusCode.OK).send(response)
+        console.log(response)
+        res.status(StatusCode.OK).send(response)
     } catch (error) {
         res.status(StatusCode.INTERNAL_SERVER_ERROR).send({
             message: "Kunde inte lägga till char",
