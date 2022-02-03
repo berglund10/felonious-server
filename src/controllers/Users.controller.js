@@ -25,6 +25,26 @@ const getAllUsers = async (req, res) => {
     }
 }
 
+const getAllBestar = async (req, res) => {
+    try {
+        const response = await pool.query('SELECT * FROM bestar')
+        res.status(StatusCode.OK).send(response.rows)
+    } catch (error) {
+        res.status(StatusCode.INTERNAL_SERVER_ERROR).send({message: error.message})
+    }
+}
+
+const getOneBest = async (req, res) => {
+    try {
+        const name = req.query.name
+        const response = await pool.query('SELECT * FROM bestar WHERE name = $1',
+        [name])
+        res.status(StatusCode.OK).send(response)
+    } catch (error) {
+        res.status(StatusCode.INTERNAL_SERVER_ERROR).send({message: error.message})
+    }
+}
+
 const loginUser = async (req, res) => {
     try {
         const {username, password} = req.body
@@ -91,9 +111,9 @@ const setUserChar = async (req, res) => {
 
 const createCharacter = async (req, res) => {
     try {
-        const {name, health, strength} = req.body
-        const response = await pool.query('INSERT INTO character(name, health, strength) VALUES ($1, $2, $3) RETURNING character_id', 
-        [name, health, strength])
+        const {name, health, strength, rundor, mynt} = req.body
+        const response = await pool.query('INSERT INTO character(name, health, strength,rundor,mynt) VALUES ($1, $2, $3, $4, $5) RETURNING character_id', 
+        [name, health, strength, rundor, mynt])
         res.status(StatusCode.CREATED).send(response)
     } catch (error) {
         res.status(StatusCode.INTERNAL_SERVER_ERROR).send({
@@ -110,5 +130,7 @@ export default {
     deleteUserChar,
     createUser,
     createCharacter,
-    setUserChar
+    setUserChar,
+    getAllBestar,
+    getOneBest
 }

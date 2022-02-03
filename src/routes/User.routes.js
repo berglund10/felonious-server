@@ -9,6 +9,8 @@ const routes = (app) => {
     app.post('/users', UsersController.createUser)
     app.post('/createchar', UsersController.createCharacter)
     app.put('/createchar', UsersController.setUserChar)
+    app.get('/bestar', UsersController.getAllBestar)
+    app.get('/best', UsersController.getOneBest)
 
 }
 
