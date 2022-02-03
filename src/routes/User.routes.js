@@ -1,4 +1,3 @@
-import UserController from "../controllers/User.controller.js"
 import UsersController from "../controllers/Users.controller.js"
 
 const routes = (app) => {
@@ -10,15 +9,6 @@ const routes = (app) => {
     app.post('/users', UsersController.createUser)
     app.post('/createchar', UsersController.createCharacter)
     app.put('/createchar', UsersController.setUserChar)
-
-
-    app.get('/user', UserController.getAllUsers)
-    app.get('/user/:userId', UserController.getUserWithId)
-    app.get('/searchuser', UserController.getUserWithUsernameQuery)
-    app.put('/user/:userId', UserController.updateUser)
-    app.delete('/user/:userId', UserController.deleteUser)
-    app.get('/checkuser', UserController.checkUser)
-    app.put('/userR/:userId', UserController.removeCharRef)
 
 }
 
