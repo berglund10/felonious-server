@@ -50,9 +50,6 @@ const loginUser = async (req, res) => {
         const {username, password} = req.body
         const response = await pool.query('SELECT * FROM users WHERE username = $1 and password = $2', 
         [username, password])
-        if(response.rows[0].character_id === null) {
-            console.log("har ingen char")
-        }
         res.status(StatusCode.OK).send(response)
 
     } catch (error) {
