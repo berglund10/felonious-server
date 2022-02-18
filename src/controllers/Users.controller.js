@@ -90,6 +90,21 @@ const deleteUserChar = async (req, res) => {
     }
 }
 
+const updateUserRundor = async (req, res) => {
+    try {
+        const {username, rundor} = req.body
+        const charId = await pool.query('SELECT character_id from users WHERE users.username = $1',
+        [username])
+        await pool.query('UPDATE character SET rundor = rundor - $2 WHERE character.character_id = $1',
+        [charId, rundor])
+    } catch (error) {
+        res.status(StatusCode.INTERNAL_SERVER_ERROR).send({
+            message: "Hittade ingen char",
+            error: error.message
+        })
+    }
+}
+
 const setUserChar = async (req, res) => {
     try {
         const {username, character_id} = req.body
@@ -120,6 +135,7 @@ const createCharacter = async (req, res) => {
     }
 }
 
+
 export default {
     getAllUsers,
     loginUser,
@@ -129,5 +145,6 @@ export default {
     createCharacter,
     setUserChar,
     getAllBestar,
-    getOneBest
+    getOneBest,
+    updateUserRundor
 }
