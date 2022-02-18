@@ -96,10 +96,21 @@ const updateUserRundor = async (req, res) => {
         const charObj = await pool.query('SELECT character_id from users WHERE users.username = $1',
         [username])
         const charId = charObj.rows[0].character_id
-        await pool.query('UPDATE character SET rundor = rundor - $2 WHERE character.character_id = $1',
-        [charId, rundor])
+        const charRundor = await pool.query('SELECT rundor from character WHERE character.character_id = $1',
+        [charId])
+        console.log(charRundor.rows[0].rundor)
+        const rundorCheck = charRundor.rows[0].rundor
+        if(rundorCheck - rundor >= 0) {
+            await pool.query('UPDATE character SET rundor = rundor - $2 WHERE character.character_id = $1',
+            [charId, rundor])
+            res.status(StatusCode.OK).send("Character rundor was updated" + charId)
+        }
+        else {
+            res.status(StatusCode.OK).send("Du hade för lite rundor")
+        }
+
         console.log(charId)
-        res.status(StatusCode.OK).send("Character rundor was updated" + charId)
+        
     } catch (error) {
         res.status(StatusCode.INTERNAL_SERVER_ERROR).send({
             message: "Hittade ingen char",
