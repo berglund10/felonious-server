@@ -11,6 +11,7 @@ const routes = (app) => {
     app.put('/createchar', UsersController.setUserChar)
     app.get('/bestar', UsersController.getAllBestar)
     app.get('/best', UsersController.getOneBest)
+    app.put('/kneg', UsersController.updateUserRundor)
 
 }
 

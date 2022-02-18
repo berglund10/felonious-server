@@ -93,10 +93,13 @@ const deleteUserChar = async (req, res) => {
 const updateUserRundor = async (req, res) => {
     try {
         const {username, rundor} = req.body
-        const charId = await pool.query('SELECT character_id from users WHERE users.username = $1',
+        const charObj = await pool.query('SELECT character_id from users WHERE users.username = $1',
         [username])
+        const charId = charObj.rows[0].character_id
         await pool.query('UPDATE character SET rundor = rundor - $2 WHERE character.character_id = $1',
         [charId, rundor])
+        console.log(charId)
+        res.status(StatusCode.OK).send("Character rundor was updated" + charId)
     } catch (error) {
         res.status(StatusCode.INTERNAL_SERVER_ERROR).send({
             message: "Hittade ingen char",
