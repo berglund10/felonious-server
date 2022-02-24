@@ -1,10 +1,13 @@
 import pool from '../../db.js'
 import StatusCode from '../../config/StatusCode.js'
+import bcrypt from 'bcrypt';
 
 
 const createUser = async (req, res) => {
     try {
-        const {username, password, email} = req.body
+        let {username, password, email} = req.body
+        const hashPassword = await bcrypt.hash(password, 10);
+        password = hashPassword
         const response = await pool.query('INSERT INTO users(username, password, email) VALUES ($1, $2, $3)', 
         [username, password, email])
         res.status(StatusCode.CREATED).send(response)
@@ -48,9 +51,14 @@ const getOneBest = async (req, res) => {
 const loginUser = async (req, res) => {
     try {
         const {username, password} = req.body
-        const response = await pool.query('SELECT * FROM users WHERE username = $1 and password = $2', 
-        [username, password])
-        res.status(StatusCode.OK).send(response)
+        const response = await pool.query('SELECT * FROM users WHERE username = $1', 
+        [username])
+        //ändra så att email ska vara unikt för varje användare sen
+        if(await bcrypt.compare(password, response.rows[0].password)) {
+            res.status(StatusCode.OK).send("Du lyckades logga in")
+        } else {
+            res.status(StatusCode.OK).send("hittade ingen användare")
+        }
 
     } catch (error) {
         res.status(StatusCode.INTERNAL_SERVER_ERROR).send({
@@ -66,7 +74,6 @@ const getUserChar = async (req, res) => {
         const username = req.query.username
         const response = await pool.query('SELECT * FROM users, character WHERE users.character_id = character.character_id AND users.username = $1',
         [username])
-        console.log(response.rows)
         res.status(StatusCode.OK).send(response.rows)
     } catch (error) {
         res.status(StatusCode.INTERNAL_SERVER_ERROR).send({
@@ -93,23 +100,17 @@ const deleteUserChar = async (req, res) => {
 const updateUserRundor = async (req, res) => {
     try {
         const {username, rundor} = req.body
-        const charObj = await pool.query('SELECT character_id from users WHERE users.username = $1',
-        [username])
+        const charObj = await pool.query('SELECT character_id from users WHERE users.username = $1', [username])
         const charId = charObj.rows[0].character_id
-        const charRundor = await pool.query('SELECT rundor from character WHERE character.character_id = $1',
-        [charId])
-        console.log(charRundor.rows[0].rundor)
+        const charRundor = await pool.query('SELECT rundor from character WHERE character.character_id = $1', [charId])
         const rundorCheck = charRundor.rows[0].rundor
         if(rundorCheck - rundor >= 0) {
-            await pool.query('UPDATE character SET rundor = rundor - $2 WHERE character.character_id = $1',
-            [charId, rundor])
+            await pool.query('UPDATE character SET rundor = rundor - $2 WHERE character.character_id = $1', [charId, rundor])
             res.status(StatusCode.OK).send("Character rundor was updated" + charId)
         }
         else {
             res.status(StatusCode.OK).send("Du hade för lite rundor")
         }
-
-        console.log(charId)
         
     } catch (error) {
         res.status(StatusCode.INTERNAL_SERVER_ERROR).send({
@@ -124,7 +125,6 @@ const setUserChar = async (req, res) => {
         const {username, character_id} = req.body
         const response = await pool.query('UPDATE users SET character_id = $2 where users.username = $1',
         [username, character_id])
-        console.log(response)
         res.status(StatusCode.OK).send(response)
     } catch (error) {
         res.status(StatusCode.INTERNAL_SERVER_ERROR).send({
